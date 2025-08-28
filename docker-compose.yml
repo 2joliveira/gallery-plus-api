@@ -1,0 +1,37 @@
+services:
+  # ==============================================================================
+  # POSTGRES SERVER # ==============================================================================
+  gallery-db-docker:
+    image: postgres:17
+    container_name: gallery-postgresql
+    environment:
+      POSTGRES_DB: gallerydb
+      POSTGRES_PASSWORD: 1234567
+    ports:
+      - 5433:5432
+    volumes:
+      - ./.data/postgresql/data:/var/lib/postgresql/data
+    networks:
+      - dev-network
+  # ==============================================================================
+  # DB ADMIN # ==============================================================================
+  pg-admin-docker:
+    image: dpage/pgadmin4
+    container_name: dev-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: 2j@email.com
+      PGADMIN_DEFAULT_PASSWORD: 1234567
+    ports:
+      - 5050:80
+    volumes:
+      - ./.data/pgadmin:/var/lib/pgadmin
+    depends_on:
+      - gallery-db-docker
+    networks:
+      - dev-network
+# ======================================================================================================================
+# REDE
+# ======================================================================================================================
+networks:
+  dev-network:
+    driver: bridge
