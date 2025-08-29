@@ -2,7 +2,7 @@ import { Body, Controller, Post } from '@nestjs/common';
 import { PhotoService } from './photo.service';
 import { PhotoDto } from './dto/photo.dto';
 
-@Controller('photo')
+@Controller('photos')
 export class PhotoController {
   constructor(private readonly photoService: PhotoService) {}
 
