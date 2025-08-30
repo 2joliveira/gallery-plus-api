@@ -1,4 +1,9 @@
-import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import {
+  GetObjectCommand,
+  PutObjectCommand,
+  S3Client,
+} from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { Injectable } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { EnvService } from 'src/env/env.service';
@@ -40,5 +45,27 @@ export class B2Storage {
     return {
       url: uniqueFileName,
     };
+  }
+
+  async list(photos: { url: string }[]) {
+    const files = await Promise.all(
+      photos.map(async (file) => {
+        const getObjCommand = new GetObjectCommand({
+          Bucket: this.envService.get('AWS_BUCKET_NAME'),
+          Key: file.url,
+        });
+
+        const signedUrl = await getSignedUrl(this.client, getObjCommand, {
+          expiresIn: 3600,
+        });
+
+        return {
+          key: file.url,
+          url: signedUrl,
+        };
+      }),
+    );
+
+    return files;
   }
 }

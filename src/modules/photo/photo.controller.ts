@@ -1,6 +1,7 @@
 import {
   Controller,
   FileTypeValidator,
+  Get,
   MaxFileSizeValidator,
   ParseFilePipe,
   Post,
@@ -28,5 +29,10 @@ export class PhotoController {
     file: Express.Multer.File,
   ) {
     return this.photoService.create(file);
+  }
+
+  @Get()
+  listAll() {
+    return this.photoService.findmany();
   }
 }
