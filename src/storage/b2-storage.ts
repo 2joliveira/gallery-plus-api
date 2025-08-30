@@ -1,7 +1,13 @@
-import { S3Client } from '@aws-sdk/client-s3';
+import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { Injectable } from '@nestjs/common';
+import { randomUUID } from 'node:crypto';
 import { EnvService } from 'src/env/env.service';
 
+interface UploadProps {
+  fileName: string;
+  fileType: string;
+  body: Buffer;
+}
 @Injectable()
 export class B2Storage {
   private client: S3Client;
@@ -16,5 +22,23 @@ export class B2Storage {
       },
       forcePathStyle: true,
     });
+  }
+
+  async upload({ fileName, fileType, body }: UploadProps) {
+    const uploadId = randomUUID();
+    const uniqueFileName = `${uploadId}-${fileName}`;
+
+    await this.client.send(
+      new PutObjectCommand({
+        Bucket: this.envService.get('AWS_BUCKET_NAME'),
+        Key: uniqueFileName,
+        ContentType: fileType,
+        Body: body,
+      }),
+    );
+
+    return {
+      url: uniqueFileName,
+    };
   }
 }

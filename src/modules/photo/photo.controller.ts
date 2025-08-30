@@ -1,13 +1,32 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import {
+  Controller,
+  FileTypeValidator,
+  MaxFileSizeValidator,
+  ParseFilePipe,
+  Post,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
 import { PhotoService } from './photo.service';
-import { PhotoDto } from './dto/photo.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('photos')
 export class PhotoController {
   constructor(private readonly photoService: PhotoService) {}
 
   @Post()
-  create(@Body() createPhotoDto: PhotoDto) {
-    return this.photoService.create(createPhotoDto);
+  @UseInterceptors(FileInterceptor('file'))
+  create(
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({ maxSize: 1024 * 1024 * 2 }),
+          new FileTypeValidator({ fileType: '.(png|jpg|jpeg)' }),
+        ],
+      }),
+    )
+    file: Express.Multer.File,
+  ) {
+    return this.photoService.create(file);
   }
 }
