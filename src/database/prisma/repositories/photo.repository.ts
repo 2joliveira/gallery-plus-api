@@ -6,8 +6,8 @@ import { PrismaService } from '../prisma.service';
 export class PhotoRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
-  findMany(findManyDto: Prisma.PhotoFindManyArgs) {
-    return this.prismaService.photo.findMany(findManyDto);
+  findMany() {
+    return this.prismaService.photo.findMany();
   }
 
   findFirst(findFirstDto: Prisma.PhotoFindFirstArgs) {
