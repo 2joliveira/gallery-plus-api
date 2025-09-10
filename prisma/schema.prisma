@@ -14,22 +14,24 @@ datasource db {
 }
 
 model Photo {
-  id     Int              @id @default(autoincrement())
-  url    String
-  albums PhotosOnAlbums[]
+  id      String         @id @default(uuid())
+  title   String
+  imageId String?
+  albums  PhotoOnAlbum[]
 }
 
 model Album {
-  id     Int              @id @default(autoincrement())
+  id     String         @id @default(uuid())
   title  String
-  photos PhotosOnAlbums[]
+  photos PhotoOnAlbum[]
 }
 
-model PhotosOnAlbums {
-  photoId Int
-  albumId Int
-  photo   Photo @relation(fields: [photoId], references: [id])
-  album   Album @relation(fields: [albumId], references: [id])
+model PhotoOnAlbum {
+  photoId String
+  albumId String
+
+  photo Photo @relation(fields: [photoId], references: [id])
+  album Album @relation(fields: [albumId], references: [id])
 
   @@id([photoId, albumId])
 }

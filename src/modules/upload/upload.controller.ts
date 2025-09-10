@@ -8,12 +8,12 @@ import {
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
-import { PhotoService } from './photo.service';
+import { UploadService } from './upload.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('photos')
-export class PhotoController {
-  constructor(private readonly photoService: PhotoService) {}
+export class UploadController {
+  constructor(private readonly photoService: UploadService) {}
 
   @Post()
   @UseInterceptors(FileInterceptor('file'))
