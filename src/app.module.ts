@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './database/database.module';
-import { PhotoModule } from './modules/photo/photo.module';
 import { StorageModule } from './storage/storage.module';
+import { UploadModule } from './modules/upload/upload.module';
 import { EnvModule } from './env/env.module';
 import { envSchema } from './env/env';
 
@@ -13,7 +13,7 @@ import { envSchema } from './env/env';
       isGlobal: true,
     }),
     DatabaseModule,
-    PhotoModule,
+    UploadModule,
     StorageModule,
     EnvModule,
   ],

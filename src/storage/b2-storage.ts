@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {
   GetObjectCommand,
   PutObjectCommand,
@@ -5,6 +6,7 @@ import {
 } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { Injectable } from '@nestjs/common';
+import { Photo } from '@prisma/client';
 import { randomUUID } from 'node:crypto';
 import { EnvService } from 'src/env/env.service';
 
@@ -43,16 +45,16 @@ export class B2Storage {
     );
 
     return {
-      url: uniqueFileName,
+      imageId: uniqueFileName,
     };
   }
 
-  async list(photos: { url: string }[]) {
+  async list(photos: Photo[]) {
     const files = await Promise.all(
       photos.map(async (file) => {
         const getObjCommand = new GetObjectCommand({
           Bucket: this.envService.get('AWS_BUCKET_NAME'),
-          Key: file.url,
+          Key: file.imageId || undefined,
         });
 
         const signedUrl = await getSignedUrl(this.client, getObjCommand, {
@@ -60,7 +62,7 @@ export class B2Storage {
         });
 
         return {
-          key: file.url,
+          key: file.imageId || undefined,
           url: signedUrl,
         };
       }),
