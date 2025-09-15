@@ -50,11 +50,11 @@ export class B2Storage {
   }
 
   async list(photos: Photo[]) {
-    const files = await Promise.all(
+    const parsedphotos = await Promise.all(
       photos.map(async (file) => {
         const getObjCommand = new GetObjectCommand({
           Bucket: this.envService.get('AWS_BUCKET_NAME'),
-          Key: file.imageId || undefined,
+          Key: file.imageId,
         });
 
         const signedUrl = await getSignedUrl(this.client, getObjCommand, {
@@ -62,12 +62,12 @@ export class B2Storage {
         });
 
         return {
-          key: file.imageId || undefined,
+          ...file,
           url: signedUrl,
         };
       }),
     );
 
-    return files;
+    return parsedphotos;
   }
 }

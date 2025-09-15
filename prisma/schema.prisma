@@ -16,7 +16,7 @@ datasource db {
 model Photo {
   id      String         @id @default(uuid())
   title   String
-  imageId String?
+  imageId String
   albums  PhotoOnAlbum[]
 }
 
