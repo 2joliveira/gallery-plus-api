@@ -2,7 +2,7 @@
 CREATE TABLE "public"."Photo" (
     "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
-    "imageId" TEXT,
+    "imageId" TEXT NOT NULL,
 
     CONSTRAINT "Photo_pkey" PRIMARY KEY ("id")
 );
