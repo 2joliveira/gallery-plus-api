@@ -5,6 +5,7 @@ import { StorageModule } from './storage/storage.module';
 import { PhotoModule } from './modules/photo/photo.module';
 import { EnvModule } from './env/env.module';
 import { envSchema } from './env/env';
+import { AlbumModule } from './modules/album/album.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { envSchema } from './env/env';
     }),
     DatabaseModule,
     PhotoModule,
+    AlbumModule,
     StorageModule,
     EnvModule,
   ],

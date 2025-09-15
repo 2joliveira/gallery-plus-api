@@ -18,12 +18,9 @@ export class PhotoService {
         body: file.buffer,
       });
 
-      if (imageId) {
-        return await this.photoRepository.create({
-          data: { ...data, imageId },
-        });
-      }
-      return null;
+      return await this.photoRepository.create({
+        data: { ...data, imageId },
+      });
     } catch {
       throw new InternalServerErrorException('Erro ao criar foto');
     }
