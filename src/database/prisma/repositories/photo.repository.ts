@@ -7,7 +7,15 @@ export class PhotoRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
   findMany() {
-    return this.prismaService.photo.findMany();
+    return this.prismaService.photo.findMany({
+      include: {
+        albums: {
+          include: {
+            album: true,
+          },
+        },
+      },
+    });
   }
 
   findFirst(findFirstDto: Prisma.PhotoFindFirstArgs) {

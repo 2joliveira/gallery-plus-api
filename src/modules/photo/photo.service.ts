@@ -10,16 +10,35 @@ export class PhotoService {
     private storage: B2Storage,
   ) {}
 
-  async create(data: PhotoDto, file: Express.Multer.File) {
+  async create({ title, albumsIds = [] }: PhotoDto, file: Express.Multer.File) {
     try {
       const { imageId } = await this.storage.upload({
-        fileName: data.title,
+        fileName: title,
         fileType: file.mimetype,
         body: file.buffer,
       });
 
       return await this.photoRepository.create({
-        data: { ...data, imageId },
+        data: {
+          title: title,
+          imageId,
+          albums:
+            albumsIds?.length > 0
+              ? {
+                  create: albumsIds.map((albumId) => ({
+                    album: { connect: { id: albumId } },
+                  })),
+                }
+              : undefined,
+        },
+        include: {
+          albums: {
+            select: {
+              albumId: true,
+              photoId: true,
+            },
+          },
+        },
       });
     } catch {
       throw new InternalServerErrorException('Erro ao criar foto');
@@ -30,7 +49,15 @@ export class PhotoService {
     try {
       const photos = await this.photoRepository.findMany();
 
-      return await this.storage.list(photos);
+      const parsedPhotos = photos.map((photo) => ({
+        ...photo,
+        albums: photo.albums.map(({ album: { id, title } }) => ({
+          id,
+          title,
+        })),
+      }));
+
+      return await this.storage.list(parsedPhotos);
     } catch {
       throw new InternalServerErrorException('Error ao listar fotos!');
     }
