@@ -30,7 +30,15 @@ export class AlbumService {
         },
       });
     } catch {
-      throw new InternalServerErrorException('Erro ao criar álbum');
+      throw new InternalServerErrorException('Erro ao criar álbum!');
+    }
+  }
+
+  async findMany() {
+    try {
+      return await this.albumRepository.findMany();
+    } catch {
+      throw new InternalServerErrorException('Error ao listar álbuns!');
     }
   }
 }

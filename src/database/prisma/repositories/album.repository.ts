@@ -9,4 +9,8 @@ export class AlbumRepository {
   create(createDto: Prisma.AlbumCreateArgs) {
     return this.prismaService.album.create(createDto);
   }
+
+  findMany() {
+    return this.prismaService.album.findMany();
+  }
 }
