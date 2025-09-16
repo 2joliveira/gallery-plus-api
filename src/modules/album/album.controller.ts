@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { AlbumService } from './album.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
 
@@ -9,5 +9,10 @@ export class AlbumController {
   @Post()
   async create(@Body() dto: CreateAlbumDto) {
     return await this.albumService.create(dto);
+  }
+
+  @Get()
+  async listAll() {
+    return await this.albumService.findMany();
   }
 }

@@ -36,8 +36,6 @@ export class PhotoController {
 
   @Get()
   listAll() {
-    const photos = this.photoService.findmany();
-
-    return photos;
+    return this.photoService.findmany();
   }
 }
