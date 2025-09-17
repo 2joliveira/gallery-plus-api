@@ -45,9 +45,12 @@ export class PhotoService {
     }
   }
 
-  async findmany() {
+  async findmany(page: number, limit: number) {
     try {
-      const photos = await this.photoRepository.findMany();
+      const { photos, hasMore } = await this.photoRepository.findMany(
+        page,
+        limit,
+      );
 
       const parsedPhotos = photos.map((photo) => ({
         ...photo,
@@ -57,7 +60,12 @@ export class PhotoService {
         })),
       }));
 
-      return await this.storage.list(parsedPhotos);
+      const photosWithUrl = await this.storage.list(parsedPhotos);
+
+      return {
+        photos: photosWithUrl,
+        hasMore,
+      };
     } catch {
       throw new InternalServerErrorException('Error ao listar fotos!');
     }

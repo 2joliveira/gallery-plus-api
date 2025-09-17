@@ -6,8 +6,12 @@ import { PrismaService } from '../prisma.service';
 export class PhotoRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
-  findMany() {
-    return this.prismaService.photo.findMany({
+  async findMany(page: number, limit: number) {
+    const skip = (page - 1) * limit;
+
+    const photos = await this.prismaService.photo.findMany({
+      skip,
+      take: limit,
       include: {
         albums: {
           include: {
@@ -16,6 +20,13 @@ export class PhotoRepository {
         },
       },
     });
+
+    const total = await this.prismaService.photo.count();
+
+    return {
+      photos,
+      hasMore: page * limit < total,
+    };
   }
 
   findFirst(findFirstDto: Prisma.PhotoFindFirstArgs) {
