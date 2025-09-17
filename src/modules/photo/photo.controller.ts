@@ -5,7 +5,9 @@ import {
   Get,
   MaxFileSizeValidator,
   ParseFilePipe,
+  ParseIntPipe,
   Post,
+  Query,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
@@ -35,7 +37,10 @@ export class PhotoController {
   }
 
   @Get()
-  listAll() {
-    return this.photoService.findmany();
+  listAll(
+    @Query('page', ParseIntPipe) page = 1,
+    @Query('limit', ParseIntPipe) limit = 10,
+  ) {
+    return this.photoService.findmany(page, limit);
   }
 }
