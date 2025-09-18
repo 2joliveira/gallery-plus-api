@@ -6,7 +6,9 @@ import { PrismaService } from '../prisma.service';
 export class PhotoRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async findMany(page: number, limit: number) {
+  async findMany(page: number, albumId: string) {
+    console.log({ albumId });
+    const limit = 10;
     const skip = (page - 1) * limit;
 
     const photos = await this.prismaService.photo.findMany({

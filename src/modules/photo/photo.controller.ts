@@ -38,9 +38,10 @@ export class PhotoController {
 
   @Get()
   listAll(
-    @Query('page', ParseIntPipe) page = 1,
-    @Query('limit', ParseIntPipe) limit = 10,
+    @Query('page', new ParseIntPipe({ optional: true })) page = 1,
+    @Query('albumId') albumId: string,
   ) {
-    return this.photoService.findmany(page, limit);
+    console.log({ page, albumId });
+    return this.photoService.findmany(page, albumId);
   }
 }
