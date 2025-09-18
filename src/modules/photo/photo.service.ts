@@ -18,7 +18,7 @@ export class PhotoService {
         body: file.buffer,
       });
 
-      return await this.photoRepository.create({
+      const photo = await this.photoRepository.create({
         data: {
           title: title,
           imageId,
@@ -40,16 +40,18 @@ export class PhotoService {
           },
         },
       });
+
+      return await this.storage.list([photo]);
     } catch {
       throw new InternalServerErrorException('Erro ao criar foto');
     }
   }
 
-  async findmany(page: number, limit: number) {
+  async findmany(page: number, albumId: string) {
     try {
       const { photos, hasMore } = await this.photoRepository.findMany(
         page,
-        limit,
+        albumId,
       );
 
       const parsedPhotos = photos.map((photo) => ({
