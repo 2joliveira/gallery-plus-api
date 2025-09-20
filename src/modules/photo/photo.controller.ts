@@ -41,7 +41,6 @@ export class PhotoController {
     @Query('page', new ParseIntPipe({ optional: true })) page = 1,
     @Query('albumId') albumId: string,
   ) {
-    console.log({ page, albumId });
     return this.photoService.findmany(page, albumId);
   }
 }
