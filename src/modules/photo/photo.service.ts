@@ -47,11 +47,12 @@ export class PhotoService {
     }
   }
 
-  async findmany(page: number, albumId: string) {
+  async findmany(page: number, albumId?: string, q?: string) {
     try {
       const { photos, hasMore } = await this.photoRepository.findMany(
         page,
         albumId,
+        q,
       );
 
       const parsedPhotos = photos.map((photo) => ({
