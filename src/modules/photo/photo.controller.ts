@@ -40,7 +40,8 @@ export class PhotoController {
   listAll(
     @Query('page', new ParseIntPipe({ optional: true })) page = 1,
     @Query('albumId') albumId: string,
+    @Query('q') q: string,
   ) {
-    return this.photoService.findmany(page, albumId);
+    return this.photoService.findmany(page, albumId, q);
   }
 }
