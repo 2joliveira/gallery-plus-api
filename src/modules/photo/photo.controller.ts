@@ -4,6 +4,7 @@ import {
   FileTypeValidator,
   Get,
   MaxFileSizeValidator,
+  Param,
   ParseFilePipe,
   ParseIntPipe,
   Post,
@@ -43,5 +44,10 @@ export class PhotoController {
     @Query('q') q: string,
   ) {
     return this.photoService.findmany(page, albumId, q);
+  }
+
+  @Get('/:id')
+  findById(@Param('id') id: string) {
+    return this.photoService.findById(id);
   }
 }

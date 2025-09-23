@@ -46,8 +46,17 @@ export class PhotoRepository {
     };
   }
 
-  findFirst(findFirstDto: Prisma.PhotoFindFirstArgs) {
-    return this.prismaService.photo.findFirst(findFirstDto);
+  async findUnique(findUniqueDto: Prisma.PhotoWhereUniqueInput) {
+    return await this.prismaService.photo.findUnique({
+      where: { id: findUniqueDto.id },
+      include: {
+        albums: {
+          include: {
+            album: true,
+          },
+        },
+      },
+    });
   }
 
   create(createDto: Prisma.PhotoCreateArgs) {

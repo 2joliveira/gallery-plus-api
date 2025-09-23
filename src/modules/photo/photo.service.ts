@@ -73,4 +73,28 @@ export class PhotoService {
       throw new InternalServerErrorException('Error ao listar fotos!');
     }
   }
+
+  async findById(photoId: string) {
+    try {
+      const photo = await this.photoRepository.findUnique({
+        id: photoId,
+      });
+
+      if (!photo) return;
+
+      const parsedPhotos = [photo].map((photo) => ({
+        ...photo,
+        albums: photo.albums.map(({ album: { id, title } }) => ({
+          id,
+          title,
+        })),
+      }));
+
+      const photosWithUrl = await this.storage.list(parsedPhotos);
+
+      return { ...photosWithUrl[0] };
+    } catch {
+      throw new InternalServerErrorException('Erro ao buscar foto!');
+    }
+  }
 }
