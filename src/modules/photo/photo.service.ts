@@ -2,11 +2,14 @@ import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { PhotoRepository } from 'src/database/prisma/repositories/photo.repository';
 import { B2Storage } from 'src/storage/b2-storage';
 import { PhotoDto } from './dto/photo.dto';
+import { UpdatePhotoDto } from './dto/update-photo.dto';
+import { PhotoOnAlbumRepository } from 'src/database/prisma/repositories/photoOnAlbum.repository';
 
 @Injectable()
 export class PhotoService {
   constructor(
     private readonly photoRepository: PhotoRepository,
+    private readonly photoOnAlbumRepository: PhotoOnAlbumRepository,
     private storage: B2Storage,
   ) {}
 
@@ -42,8 +45,9 @@ export class PhotoService {
       });
 
       return await this.storage.list([photo]);
-    } catch {
-      throw new InternalServerErrorException('Erro ao criar foto');
+    } catch (err) {
+      console.error(err);
+      throw new InternalServerErrorException('Erro ao criar foto!');
     }
   }
 
@@ -69,7 +73,8 @@ export class PhotoService {
         photos: photosWithUrl,
         hasMore,
       };
-    } catch {
+    } catch (err) {
+      console.error(err);
       throw new InternalServerErrorException('Error ao listar fotos!');
     }
   }
@@ -93,8 +98,24 @@ export class PhotoService {
       const photosWithUrl = await this.storage.list(parsedPhotos);
 
       return { ...photosWithUrl[0] };
-    } catch {
+    } catch (err) {
+      console.error(err);
       throw new InternalServerErrorException('Erro ao buscar foto!');
+    }
+  }
+
+  async update({ imageId, albumsIds = [] }: UpdatePhotoDto) {
+    try {
+      await Promise.all(
+        albumsIds.map((albumId) =>
+          this.photoOnAlbumRepository.upsert(imageId, albumId),
+        ),
+      );
+
+      return await this.photoOnAlbumRepository.deleteMany(imageId, albumsIds);
+    } catch (err) {
+      console.error(err);
+      throw new InternalServerErrorException('Erro ao atualizar foto!');
     }
   }
 }

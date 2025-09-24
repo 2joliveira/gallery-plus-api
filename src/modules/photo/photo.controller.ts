@@ -8,6 +8,7 @@ import {
   ParseFilePipe,
   ParseIntPipe,
   Post,
+  Put,
   Query,
   UploadedFile,
   UseInterceptors,
@@ -49,5 +50,11 @@ export class PhotoController {
   @Get('/:id')
   findById(@Param('id') id: string) {
     return this.photoService.findById(id);
+  }
+
+  @Put('/:id/albums')
+  update(@Param('id') id: string, @Body() data: { albumsIds: string[] }) {
+    console.log({ id, data });
+    return this.photoService.update({ imageId: id, albumsIds: data.albumsIds });
   }
 }
