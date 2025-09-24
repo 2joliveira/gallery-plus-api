@@ -47,16 +47,46 @@ export class PhotoRepository {
   }
 
   async findUnique(findUniqueDto: Prisma.PhotoWhereUniqueInput) {
-    return await this.prismaService.photo.findUnique({
-      where: { id: findUniqueDto.id },
-      include: {
-        albums: {
-          include: {
-            album: true,
+    // return await this.prismaService.photo.findUnique({
+    //   where: { id: findUniqueDto.id },
+    //   include: {
+    //     albums: {
+    //       include: {
+    //         album: true,
+    //       },
+    //     },
+    //   },
+    // });
+
+    const [photo, previous, next] = await this.prismaService.$transaction([
+      // Foto atual
+      this.prismaService.photo.findUnique({
+        where: { id: findUniqueDto.id },
+        include: {
+          albums: {
+            include: { album: true },
           },
         },
-      },
-    });
+      }),
+      // Foto anterior (id menor mais próximo)
+      this.prismaService.photo.findFirst({
+        where: { id: { lt: findUniqueDto.id } },
+        orderBy: { id: 'desc' },
+        select: { id: true },
+      }),
+      // Foto próxima (id maior mais próximo)
+      this.prismaService.photo.findFirst({
+        where: { id: { gt: findUniqueDto.id } },
+        orderBy: { id: 'asc' },
+        select: { id: true },
+      }),
+    ]);
+
+    return {
+      photo,
+      previous,
+      next,
+    };
   }
 
   create(createDto: Prisma.PhotoCreateArgs) {
