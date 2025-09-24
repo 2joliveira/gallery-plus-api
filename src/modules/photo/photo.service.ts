@@ -81,7 +81,7 @@ export class PhotoService {
 
   async findById(photoId: string) {
     try {
-      const photo = await this.photoRepository.findUnique({
+      const { photo, previous, next } = await this.photoRepository.findUnique({
         id: photoId,
       });
 
@@ -97,7 +97,11 @@ export class PhotoService {
 
       const photosWithUrl = await this.storage.list(parsedPhotos);
 
-      return { ...photosWithUrl[0] };
+      return {
+        ...photosWithUrl[0],
+        nextPhotoId: next?.id || null,
+        previousPhotoId: previous?.id || null,
+      };
     } catch (err) {
       console.error(err);
       throw new InternalServerErrorException('Erro ao buscar foto!');
