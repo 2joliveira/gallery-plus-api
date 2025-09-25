@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   FileTypeValidator,
   Get,
   MaxFileSizeValidator,
@@ -54,7 +55,11 @@ export class PhotoController {
 
   @Put('/:id/albums')
   update(@Param('id') id: string, @Body() data: { albumsIds: string[] }) {
-    console.log({ id, data });
     return this.photoService.update({ imageId: id, albumsIds: data.albumsIds });
+  }
+
+  @Delete('/:id/:imageId')
+  remove(@Param('id') id: string, @Param('id') imageId: string) {
+    return this.photoService.delete(id, imageId);
   }
 }

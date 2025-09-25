@@ -15,7 +15,7 @@ export class PhotoOnAlbumRepository {
     });
   }
 
-  deleteMany(imageId: string, albumsIds: string[]) {
+  deleteMany(imageId: string, albumsIds: string[] = []) {
     return this.prismaService.photoOnAlbum.deleteMany({
       where: {
         photoId: imageId,
