@@ -122,4 +122,17 @@ export class PhotoService {
       throw new InternalServerErrorException('Erro ao atualizar foto!');
     }
   }
+
+  async delete(photoId: string, imageId: string) {
+    try {
+      await this.storage.delete(imageId);
+
+      await this.photoOnAlbumRepository.deleteMany(photoId);
+
+      return await this.photoRepository.delete({ where: { id: photoId } });
+    } catch (err) {
+      console.error(err);
+      throw new InternalServerErrorException('Erro ao deletar foto!');
+    }
+  }
 }

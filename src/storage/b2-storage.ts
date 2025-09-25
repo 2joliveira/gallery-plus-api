@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {
+  DeleteObjectCommand,
   GetObjectCommand,
   PutObjectCommand,
   S3Client,
@@ -69,5 +70,14 @@ export class B2Storage {
     );
 
     return parsedphotos;
+  }
+
+  async delete(imageId: string) {
+    return await this.client.send(
+      new DeleteObjectCommand({
+        Bucket: this.envService.get('AWS_BUCKET_NAME'),
+        Key: imageId,
+      }),
+    );
   }
 }
