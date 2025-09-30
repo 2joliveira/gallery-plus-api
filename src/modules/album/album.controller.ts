@@ -1,4 +1,11 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  ParseIntPipe,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { AlbumService } from './album.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
 
@@ -14,5 +21,12 @@ export class AlbumController {
   @Get()
   async listAll() {
     return await this.albumService.findMany();
+  }
+
+  @Get('photos')
+  async listAllWithPhotos(
+    @Query('page', new ParseIntPipe({ optional: true })) page = 1,
+  ) {
+    return await this.albumService.findManyWithPhotos(page);
   }
 }
