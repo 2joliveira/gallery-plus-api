@@ -13,4 +13,49 @@ export class AlbumRepository {
   findMany() {
     return this.prismaService.album.findMany();
   }
+
+  async findManyWithPhotos(page: number) {
+    const limit = 5;
+    const skip = (page - 1) * limit;
+
+    const albums = await this.prismaService.album.findMany({
+      skip,
+      take: limit,
+      include: {
+        photos: {
+          include: {
+            photo: true,
+          },
+        },
+      },
+    });
+
+    const total = await this.prismaService.album.count();
+
+    return {
+      albums,
+      hasMore: page * limit < total,
+    };
+  }
+
+  findUnique(findUniqueDto: Prisma.AlbumWhereUniqueInput) {
+    return this.prismaService.album.findUnique({
+      where: findUniqueDto,
+      include: {
+        photos: {
+          include: {
+            photo: true,
+          },
+        },
+      },
+    });
+  }
+
+  update(updateDto: Prisma.AlbumUpdateArgs) {
+    return this.prismaService.album.update(updateDto);
+  }
+
+  delete(deleteDto: Prisma.AlbumWhereUniqueInput) {
+    return this.prismaService.album.delete({ where: deleteDto });
+  }
 }
