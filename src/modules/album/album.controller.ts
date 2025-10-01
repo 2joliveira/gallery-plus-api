@@ -25,7 +25,7 @@ export class AlbumController {
 
   @Get('photos')
   async listAllWithPhotos(
-    @Query('page', new ParseIntPipe({ optional: true })) page = 1,
+    @Query('pageAlbums', new ParseIntPipe({ optional: true })) page = 1,
   ) {
     return await this.albumService.findManyWithPhotos(page);
   }
