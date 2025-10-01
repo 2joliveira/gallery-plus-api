@@ -38,11 +38,29 @@ export class PhotoRepository {
       },
     });
 
-    const total = await this.prismaService.photo.count();
+    const total = await this.prismaService.photo.count({
+      where: {
+        AND: [
+          albumId
+            ? {
+                albums: {
+                  some: { albumId },
+                },
+              }
+            : {},
+          q
+            ? {
+                OR: [{ title: { contains: q, mode: 'insensitive' } }],
+              }
+            : {},
+        ],
+      },
+    });
 
     return {
       photos,
       hasMore: page * limit < total,
+      total,
     };
   }
 
