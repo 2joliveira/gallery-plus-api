@@ -53,7 +53,7 @@ export class PhotoService {
 
   async findmany(page: number, albumId?: string, q?: string) {
     try {
-      const { photos, hasMore } = await this.photoRepository.findMany(
+      const { photos, hasMore, total } = await this.photoRepository.findMany(
         page,
         albumId,
         q,
@@ -72,6 +72,7 @@ export class PhotoService {
       return {
         photos: photosWithUrl,
         hasMore,
+        total,
       };
     } catch (err) {
       console.error(err);

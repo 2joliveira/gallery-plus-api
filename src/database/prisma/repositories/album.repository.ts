@@ -28,6 +28,7 @@ export class AlbumRepository {
           },
         },
       },
+      orderBy: { photos: { _count: 'desc' } },
     });
 
     const total = await this.prismaService.album.count();
