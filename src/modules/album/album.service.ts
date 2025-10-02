@@ -75,4 +75,16 @@ export class AlbumService {
       throw new InternalServerErrorException('Erro ao buscar álbum!');
     }
   }
+
+  async update(albumId: string, title: string) {
+    try {
+      return await this.albumRepository.update({
+        where: { id: albumId },
+        data: { title },
+      });
+    } catch (err) {
+      console.error(err);
+      throw new InternalServerErrorException('Erro ao atualizar álbum!');
+    }
+  }
 }
