@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -40,5 +41,10 @@ export class AlbumController {
   @Put('/:id')
   async update(@Param('id') id: string, @Body() dto: CreateAlbumDto) {
     return await this.albumService.update(id, dto.title);
+  }
+
+  @Delete('/:id')
+  async remove(@Param('id') id: string) {
+    return await this.albumService.remove(id);
   }
 }

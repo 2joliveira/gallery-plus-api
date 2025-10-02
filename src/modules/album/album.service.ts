@@ -87,4 +87,13 @@ export class AlbumService {
       throw new InternalServerErrorException('Erro ao atualizar álbum!');
     }
   }
+
+  async remove(albumId: string) {
+    try {
+      return await this.albumRepository.delete({ id: albumId });
+    } catch (err) {
+      console.error(err);
+      throw new InternalServerErrorException('Erro ao deletar álbum!');
+    }
+  }
 }
