@@ -15,7 +15,7 @@ export class AlbumRepository {
   }
 
   async findManyWithPhotos(page: number) {
-    const limit = 5;
+    const limit = 4;
     const skip = (page - 1) * limit;
 
     const albums = await this.prismaService.album.findMany({
@@ -42,13 +42,6 @@ export class AlbumRepository {
   findUnique(findUniqueDto: Prisma.AlbumWhereUniqueInput) {
     return this.prismaService.album.findUnique({
       where: findUniqueDto,
-      include: {
-        photos: {
-          include: {
-            photo: true,
-          },
-        },
-      },
     });
   }
 
