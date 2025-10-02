@@ -66,4 +66,13 @@ export class AlbumService {
       throw new InternalServerErrorException('Error ao listar álbuns!');
     }
   }
+
+  async finById(albumId: string) {
+    try {
+      return await this.albumRepository.findUnique({ id: albumId });
+    } catch (err) {
+      console.error(err);
+      throw new InternalServerErrorException('Erro ao buscar álbum!');
+    }
+  }
 }

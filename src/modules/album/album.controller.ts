@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   ParseIntPipe,
   Post,
   Query,
@@ -23,10 +24,15 @@ export class AlbumController {
     return await this.albumService.findMany();
   }
 
-  @Get('photos')
+  @Get('/photos')
   async listAllWithPhotos(
     @Query('pageAlbums', new ParseIntPipe({ optional: true })) page = 1,
   ) {
     return await this.albumService.findManyWithPhotos(page);
+  }
+
+  @Get('/:id')
+  async finById(@Param('id') id: string) {
+    return await this.albumService.finById(id);
   }
 }
