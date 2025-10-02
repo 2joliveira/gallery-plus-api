@@ -49,7 +49,15 @@ export class AlbumRepository {
     return this.prismaService.album.update(updateDto);
   }
 
-  delete(deleteDto: Prisma.AlbumWhereUniqueInput) {
-    return this.prismaService.album.delete({ where: deleteDto });
+  async delete(deleteDto: Prisma.AlbumWhereUniqueInput) {
+    return this.prismaService.$transaction(async (tx) => {
+      await tx.photoOnAlbum.deleteMany({
+        where: { albumId: deleteDto.id },
+      });
+
+      return tx.album.delete({
+        where: deleteDto,
+      });
+    });
   }
 }
