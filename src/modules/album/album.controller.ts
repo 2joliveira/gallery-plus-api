@@ -5,6 +5,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Put,
   Query,
 } from '@nestjs/common';
 import { AlbumService } from './album.service';
@@ -34,5 +35,10 @@ export class AlbumController {
   @Get('/:id')
   async finById(@Param('id') id: string) {
     return await this.albumService.finById(id);
+  }
+
+  @Put('/:id')
+  async update(@Param('id') id: string, @Body() dto: CreateAlbumDto) {
+    return await this.albumService.update(id, dto.title);
   }
 }
