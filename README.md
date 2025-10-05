@@ -31,7 +31,7 @@ API para gerenciamento de álbuns e fotos, construída em Node utilizando NestJS
 
 ### 1. Clone o repositório
 ```bash
-git clone <repo-url>
+git clone https://github.com/2joliveira/gallery-plus-api.git
 cd gallery-plus-api
 ```
 
