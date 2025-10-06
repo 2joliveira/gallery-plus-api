@@ -5,7 +5,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.enableCors({
-    origin: 'https://gallery-plus-web.vercel.app/',
+    origin: 'https://gallery-plus-web.vercel.app',
   });
 
   await app.listen(process.env.PORT ?? 3333);
