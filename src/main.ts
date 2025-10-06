@@ -6,8 +6,6 @@ async function bootstrap() {
 
   app.enableCors({
     origin: 'https://gallery-plus-web.vercel.app/',
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true,
   });
 
   await app.listen(process.env.PORT ?? 3333);
