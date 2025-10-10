@@ -7,8 +7,6 @@ O Gallery Plus API é um backend desenvolvido em Node.js com NestJS, Prisma e Po
 
 ---
 
-API para gerenciamento de álbuns e fotos, construída em Node utilizando NestJS, Prisma e PostgreSQL. Permite o cadastro, organização e armazenamento eficiente de imagens, com integração a serviços de nuvem e suporte a múltiplos ambientes.
-
 ## Funcionalidades
 - CRUD de álbuns
 - CRUD de fotos
